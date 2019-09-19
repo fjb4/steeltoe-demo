@@ -1,12 +1,20 @@
 version: "3.7"
 services:
+  eureka:
+    image: steeltoeoss/eureka-server:2.0
+    ports:
+      - "8761:8761"
   config:
-    image: steeltoeoss/config-server:latest
+    image: steeltoeoss/config-server:2.0
     ports:
       - "8888:8888"
     environment:
-      - spring.cloud.config.server.git.uri=https://github.com/fjb4/steeltoe-config-repo
-  eureka:
-    image: steeltoeoss/eurekaserver:latest
+      - SPRING_CLOUD_CONFIG_SERVER_GIT_URI=https://github.com/fjb4/steeltoe-config-repo
+    depends_on:
+      - eureka
+  hystrix:
+    image: steeltoeoss/hystrix-dashboard:1.4
     ports:
-      - "8761:8761"
+      - "7979:7979"
+    depends_on:
+      - eureka

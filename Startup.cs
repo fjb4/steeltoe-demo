@@ -1,18 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using Steeltoe.Common.Discovery;
-using Steeltoe.Common.LoadBalancer;
+using Steeltoe.CircuitBreaker.Hystrix;
 using Steeltoe.Discovery.Client;
 
 namespace SteeltoeDemo
@@ -32,7 +25,11 @@ namespace SteeltoeDemo
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            // Add Steeltoe Discovery Client service
             services.AddDiscoveryClient(Configuration);
+
+            // Add Hystrix command GetUpstreamContent to Hystrix group "GetUpstreamContent"
+            services.AddHystrixCommand<GetUpstreamContentCommand>("GetUpstreamContent", Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -54,7 +51,8 @@ namespace SteeltoeDemo
                     upstreamHost = "date.jsontest.com";
                 }
 
-                var upstreamContent = await GetUpstreamContent(app.ApplicationServices, upstreamHost);
+                var command = app.ApplicationServices.GetService<GetUpstreamContentCommand>();
+                var upstreamContent = await command.ExecuteAsync(upstreamHost);
 
                 var message = $"<p>{applicationName}{GetAppInstanceIndex()} => {upstreamHost}</p>";
                 message += upstreamContent;
@@ -65,29 +63,6 @@ namespace SteeltoeDemo
             });
 
             app.UseDiscoveryClient();
-        }
-
-        private async Task<string> GetUpstreamContent(IServiceProvider serviceProvider, string hostname)
-        {
-            try
-            {
-                using (var httpClient = GetClient(serviceProvider))
-                {
-                    var result = await httpClient.GetStringAsync($"http://{hostname}/");
-                    return result ?? "<No response>";
-                }
-            }
-            catch (HttpRequestException ex)
-            {
-                return "Error: " + ex;
-            }
-        }
-
-        private HttpClient GetClient(IServiceProvider serviceProvider)
-        {
-            var client = serviceProvider.GetService<IDiscoveryClient>();
-            var handler = new DiscoveryHttpClientHandler(client, Logger);
-            return new HttpClient(handler, false);
         }
 
         private static string GetAppInstanceIndex()

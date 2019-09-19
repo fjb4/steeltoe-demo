@@ -1,9 +1,13 @@
 # Run on Docker (local)
 - `docker-compose up -d`
 - `docker-compose down`
+- `dotnet run --launch-profile=backend`
+- `dotnet run --launch-profile=middleware`
+- `dotnet run --launch-profile=frontend`
+
 
 # Run on Cloud Foundry
 - `cf create-service p-config-server trial myConfigServer -c ./config-server.json`
-    - `cf bind-service myApp myConfigServer`
 - `cf create-service p-service-registry trial myDiscoveryService`
-    - `cf bind-service myApp myDiscoveryService`
+- `cf create-service p-circuit-breaker-dashboard trial myHystrixService`
+- `cf push`

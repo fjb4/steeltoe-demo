@@ -14,6 +14,7 @@ applications:
     services:
       - myDiscoveryService
       - myConfigServer
+      - myHystrixService
   - name: middleware
     path: .
     memory: 256M
@@ -28,6 +29,7 @@ applications:
     services:
       - myDiscoveryService
       - myConfigServer
+      - myHystrixService
   - name: backend
     path: .
     memory: 256M
@@ -42,3 +44,4 @@ applications:
     services:
       - myDiscoveryService
       - myConfigServer
+      - myHystrixService
