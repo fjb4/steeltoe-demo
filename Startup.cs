@@ -43,7 +43,6 @@ namespace SteeltoeDemo
                 app.UseDeveloperExceptionPage();
             }
 
-            // Add Hystrix Metrics context to pipeline
             app.UseHystrixRequestContext();
 
             app.Run(async (context) =>
@@ -51,6 +50,7 @@ namespace SteeltoeDemo
                 var applicationName = Configuration["spring:application:name"];
 
                 var upstreamHost = Configuration["upstreamHost"];
+                var message = Configuration["message"];
 
                 if (string.IsNullOrWhiteSpace(upstreamHost))
                 {
@@ -60,12 +60,20 @@ namespace SteeltoeDemo
                 var command = app.ApplicationServices.GetService<GetUpstreamContentCommand>();
                 var upstreamContent = await command.ExecuteAsync(upstreamHost);
 
-                var message = $"<p>{applicationName}{GetAppInstanceIndex()} => {upstreamHost}</p>";
-                message += upstreamContent;
+                var html = "<div>";
+                html += $"Service: {applicationName}{GetAppInstanceIndex()}<br/>";
+                html += $"Message: {message}<br/>";
+                html += $"Upstream host: {upstreamHost}<br/>";
+                html += "</div><br/>";
+
+                if (!string.IsNullOrWhiteSpace(upstreamContent))
+                {
+                    html += upstreamContent;
+                }
 
                 context.Response.Headers.Add("Content-Type", "text/html");
                 context.Response.Headers.Add("Cache-Control", "no-cache");
-                await context.Response.WriteAsync(message);
+                await context.Response.WriteAsync(html);
             });
 
             app.UseDiscoveryClient();

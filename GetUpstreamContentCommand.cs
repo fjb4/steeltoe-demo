@@ -40,7 +40,12 @@ namespace SteeltoeDemo
 
         protected override async Task<string> RunFallbackAsync()
         {
-            return await Task.FromResult("FALLBACK MESSAGE");
+            var html = "<div>";
+            html += $"Service: {_upstreamHost}<br/>";
+            html += "Message: Service temporarily unavailable";
+            html += "</div>";
+
+            return await Task.FromResult(html);
         }
 
         private HttpClient GetClient()
