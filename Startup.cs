@@ -30,6 +30,9 @@ namespace SteeltoeDemo
 
             // Add Hystrix command GetUpstreamContent to Hystrix group "GetUpstreamContent"
             services.AddHystrixCommand<GetUpstreamContentCommand>("GetUpstreamContent", Configuration);
+
+            // Add Hystrix metrics stream to enable monitoring 
+            services.AddHystrixMetricsStream(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -39,6 +42,9 @@ namespace SteeltoeDemo
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            // Add Hystrix Metrics context to pipeline
+            app.UseHystrixRequestContext();
 
             app.Run(async (context) =>
             {
@@ -63,6 +69,8 @@ namespace SteeltoeDemo
             });
 
             app.UseDiscoveryClient();
+
+            app.UseHystrixMetricsStream();
         }
 
         private static string GetAppInstanceIndex()

@@ -1,9 +1,10 @@
 # Run on Docker (local)
 - `docker-compose up -d`
 - `docker-compose down`
-- `dotnet run --launch-profile=backend`
-- `dotnet run --launch-profile=middleware`
-- `dotnet run --launch-profile=frontend`
+- `export BUILD=LOCAL` (make sure this is unset to run on Cloud Foundry)
+- `dotnet watch run --launch-profile=backend`
+- `dotnet watch run --launch-profile=middleware`
+- `dotnet watch run --launch-profile=frontend`
 
 
 # Run on Cloud Foundry

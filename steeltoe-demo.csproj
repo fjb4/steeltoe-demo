@@ -19,4 +19,14 @@
     <PackageReference Include="Steeltoe.Extensions.Configuration.PlaceholderCore" Version="2.3.0" />
   </ItemGroup>
 
+  <ItemGroup Condition="'$(BUILD)' == ''">
+    <PackageReference Include="Steeltoe.CircuitBreaker.Hystrix.MetricsStreamCore" Version="2.3.0" />
+    <PackageReference Include="RabbitMQ.Client" Version="5.1.1" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(BUILD)' == 'LOCAL'">
+    <PackageReference Include="Steeltoe.CircuitBreaker.Hystrix.MetricsEventsCore" Version="2.3.0" />
+    <PackageReference Include="System.Threading.ThreadPool" Version="4.3.0" />
+  </ItemGroup>
+
 </Project>
