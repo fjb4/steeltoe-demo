@@ -10,7 +10,7 @@ applications:
       - dotnet_core_buildpack
     env:
       ASPNETCORE_ENVIRONMENT: Development
-      spring.application.name: frontend
+      "spring:application:name": frontend
     services:
       - myDiscoveryService
       - myConfigServer
@@ -25,7 +25,7 @@ applications:
       - dotnet_core_buildpack
     env:
       ASPNETCORE_ENVIRONMENT: Development
-      spring.application.name: middleware
+      "spring:application:name": middleware
     services:
       - myDiscoveryService
       - myConfigServer
@@ -40,7 +40,7 @@ applications:
       - dotnet_core_buildpack
     env:
       ASPNETCORE_ENVIRONMENT: Development
-      spring.application.name: backend
+      "spring:application:name": backend
     services:
       - myDiscoveryService
       - myConfigServer
