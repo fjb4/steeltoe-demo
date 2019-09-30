@@ -2,16 +2,16 @@ using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Steeltoe.CircuitBreaker.Hystrix;
 using Steeltoe.Common.Discovery;
-using Microsoft.Extensions.Logging;
 
 namespace SteeltoeDemo
 {
     public class GetUpstreamContentCommand : HystrixCommand<string>
     {
-        private readonly IServiceProvider _serviceProvider;
         private readonly ILogger<GetUpstreamContentCommand> _logger;
+        private readonly IServiceProvider _serviceProvider;
 
         private string _upstreamHost;
 
@@ -34,17 +34,14 @@ namespace SteeltoeDemo
             using (var httpClient = GetClient())
             {
                 var result = await httpClient.GetStringAsync($"http://{_upstreamHost}/");
-                return result ?? "<No response>";
+                return result ?? "[No response]";
             }
         }
 
         protected override async Task<string> RunFallbackAsync()
         {
-            var html = "<div>";
-            html += $"Service: {_upstreamHost}<br/>";
-            html += "Message: Service temporarily unavailable";
-            html += "</div>";
-
+            const string color = "yellow";
+            var html = Startup.BuildResponseHtml(_upstreamHost, string.Empty, color, string.Empty, string.Empty);
             return await Task.FromResult(html);
         }
 
