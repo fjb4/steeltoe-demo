@@ -12,7 +12,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
-    <PackageReference Include="Steeltoe.CircuitBreaker.HystrixCore" Version="2.3.0" />
+    <PackageReference Include="Steeltoe.CircuitBreaker.HystrixCore" Version="2.2.0" />
     <PackageReference Include="Steeltoe.Discovery.ClientCore" Version="2.3.0" />
     <PackageReference Include="Steeltoe.Extensions.Configuration.CloudFoundryCore" Version="2.3.0" />
     <PackageReference Include="Steeltoe.Extensions.Configuration.ConfigServerCore" Version="2.3.0" />
@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup Condition="'$(BUILD)' == ''">
-    <PackageReference Include="Steeltoe.CircuitBreaker.Hystrix.MetricsStreamCore" Version="2.3.0" />
+    <PackageReference Include="Steeltoe.CircuitBreaker.Hystrix.MetricsStreamCore" Version="2.2.0" />
     <PackageReference Include="RabbitMQ.Client" Version="5.1.1" />
   </ItemGroup>
 
