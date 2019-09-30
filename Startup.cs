@@ -81,7 +81,7 @@ namespace SteeltoeDemo
             if (!string.IsNullOrWhiteSpace(upstreamContent))
             {
                 sb.AppendLine("<h1 style='text-align: center; margin-top: 0.5em; margin-bottom: 0.5em;'>&#x25BC;</h1>");
-                sb.Append(upstreamContent);
+                sb.AppendLine(upstreamContent);
             }
 
             return sb.ToString();

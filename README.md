@@ -39,11 +39,23 @@ Some of the commands below are Unix-specific, but this should all run on Windows
 
 
 ## Demo Script (Cloud Foundry)
-- Show running services in [Apps Manager](https://run.pivotal.io/)
-- Show code
-  - Services have identical code
-  - Services can be chained together
-  - Only difference is in configuration
+- Demonstration of microservices
+    - Very simple ASP.NET web project
+        - Not MVC, not API
+        - All incoming requests are handled in Startup.Configure()
+    -  Intent is to demonstrate Steeltoe, removing any unnecessary code
+- Demonstrate backend service
+    - Draws a block containing information about the service
+    - Concatenates any information received from the upstream host
+- Show service implementation
+    - Retrieves color & upstream host from configuration
+    - Renders service info
+    - Calls upstream host and concatenates response
+    - Demonstrate backend, middleware, then frontend
+    - Design allows services to be chained together
+        - Frontend -> middleware -> backend -> date.jsontest.com
+        - Multiple instances of the same service with different configuration
+- Introduce [Apps Manager](https://run.pivotal.io/), show running services
 - Config Server
   - Show configuration repo on GitHub
     - https://github.com/fjb4/steeltoe-config-repo

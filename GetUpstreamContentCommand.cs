@@ -40,7 +40,7 @@ namespace SteeltoeDemo
 
         protected override async Task<string> RunFallbackAsync()
         {
-            const string color = "yellow";
+            const string color = "red";
             var html = Startup.BuildResponseHtml(_upstreamHost, string.Empty, color, string.Empty, string.Empty);
             return await Task.FromResult(html);
         }
