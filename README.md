@@ -4,9 +4,7 @@ This repository contains code that demonstrates the use of [Steeltoe](https://st
 
 Note that the demonstration of Config Server retrieves its configuration from the https://github.com/fjb4/steeltoe-config-repo repository.
 
-Some of the commands below are Unix-specific, but this should all run on Windows if you translate them to their Windows equivalents.
-
-## How to Run on Docker (local)
+## How to Run with Docker (local)
 - Prerequisites
   - [.NET Core SDK](https://dotnet.microsoft.com/download) (tested with version 2.2)
   - [Docker Desktop](https://www.docker.com/products/docker-desktop) (tested with 2.1)
@@ -15,13 +13,20 @@ Some of the commands below are Unix-specific, but this should all run on Windows
 - Stop Steeltoe services
   - `docker-compose down`
 - Run
-  - `export BUILD=LOCAL`
-    - If using multiple terminal windows, this needs to be set in each one
-    - Make sure this is unset to run on Cloud Foundry
-      - `unset BUILD`
-  - `dotnet watch run --launch-profile=backend`
-  - `dotnet watch run --launch-profile=middleware`
-  - `dotnet watch run --launch-profile=frontend`
+  - Open a terminal window
+    - Set the "BUILD" environment variable to have the value "LOCAL"
+      - Unix Bash: `export BUILD=LOCAL`
+      - Windows CMD: `set BUILD=LOCAL`
+    - `dotnet watch run --launch-profile=backend`
+    - When started, backend service should be available at `http://localhost:5200`
+  - Open a second terminal window
+    - Set the "BUILD" environment variable to have the value "LOCAL"
+    - `dotnet watch run --launch-profile=middleware`
+    - When started, middleware service should be available at `http://localhost:5100`
+  - Open a third terminal window
+    - Set the "BUILD" environment variable to have the value "LOCAL"
+    - `dotnet watch run --launch-profile=frontend`
+    - When started, frontend service should be available at `http://localhost:5000`
 
 
 ## How to Run on Cloud Foundry
@@ -39,56 +44,78 @@ Some of the commands below are Unix-specific, but this should all run on Windows
 
 
 ## Demo Script (Cloud Foundry)
-- Demonstration of microservices
-    - Very simple ASP.NET web project
-        - Not MVC, not API
-        - All incoming requests are handled in Startup.Configure()
-    -  Intent is to demonstrate Steeltoe, removing any unnecessary code
-- Demonstrate backend service
+  - This is a very simple ASP.NET web project (created with `dotnet new web`)
+    - Not MVC, not API
+    - All incoming requests are handled in Startup.Configure()
+    - Intent is to distill code down to minimum necessary for demonstrating Steeltoe
+- Demonstrate backend service in browser
     - Draws a block containing information about the service
-    - Concatenates any information received from the upstream host
-- Show service implementation
+    - Concatenates any information received from its upstream host
+- Give high-level overview of service implementation
+    - Only 3 C# files
+        - Program.cs
+        - Startup.cs
+        - GetUpstreamContentCommand.cs
+    - Requests are handled in Start.Configure()
     - Retrieves color & upstream host from configuration
-    - Renders service info
-    - Calls upstream host and concatenates response
-    - Demonstrate backend, middleware, then frontend
-    - Design allows services to be chained together
-        - Frontend -> middleware -> backend -> date.jsontest.com
-        - Multiple instances of the same service with different configuration
-- Introduce [Apps Manager](https://run.pivotal.io/), show running services
-- Config Server
-  - Show configuration repo on GitHub
-    - https://github.com/fjb4/steeltoe-config-repo
-    - Application name chooses which YAML file is used
-  - Show how configuration server points to GitHub repo
-  - Show code that retrieves configuration values
-    - appsettings.json can point to config server location
+        - Should look familiar, code is using the normal .NET configuration API
+    - Renders HTML that displays service's name & color
+    - Calls upstream host and concatenates its response
+        - Acknowledge that the code used to retrieve the upstream host's content is in a separate GetUpstreamContentCommand class; the reasons for this will be discussed later 
+- [Config Server](https://steeltoe.io/docs/steeltoe-configuration/#2-0-config-server-provider) Demonstration
+  - Utilizes Spring Cloud Config Server
+    - Supports different backends: file system, git repo, database, others
+    - Config Server itself must be configured to tell it where to pull configuration data
+      - Show config-server.json file
+  - Show the [configuration repo](https://github.com/fjb4/steeltoe-config-repo)
+    - Application's name determines which YAML file is used
+  - Show code changes necessary to support config server
+    - Steeltoe.Extensions.Configuration.ConfigServerCore NuGet package
+    - AddConfigServer() in Program.cs
+    - appsettings.json can be used to point to config server location
     - Retrieving configuration values is standard .NET syntax
-  - Demonstrate changing the configuration?
-- Service Discovery
+- Demonstrate other service instances 
+  - Show backend, middleware, then frontend in browser
+  - Design allows services to be chained together
+      - Frontend -> middleware -> backend -> date.jsontest.com
+      - Multiple instances of the same service with different configurations
+- [Service Discovery](https://steeltoe.io/docs/steeltoe-discovery/) Demonstration
+  - How are the different service instances able to communicate?
+    - Clients don't know fully qualified URL of upstream host
   - Show service registry with list of registered apps
-  - Show AddDiscoveryClient() in Startup.cs
-  - Explain how it resolves the service URL in GetUpstreamContentCommand.RunAsync()
+    - This is the "phone book" that allows apps to lookup a service's URL
+  - Show code changes necessary to implement service discovery
+    - Steeltoe.Discovery.ClientCore NuGet package
+    - Show AddDiscoveryClient() in Startup.cs
+    - HttpClient has been augmented with DiscoveryHttpClientHandler in GetUpstreamContentCommand class
   - Run multiple instances of the middleware service
     - `cf scale middleware -i 3`
   - Wait for additional service instances to appear in service registry
   - Show how calls to middleware service are load balanced across the multiple service instances
-- Circuit Breaker
-  - Show code changes needed to implement circuit breaker
-    - Show AddHystrixCommand() in Startup.cs
-    - GetUpstreamContentCommand class that derives from HystrixCommand
-      - RunAsync() vs RunFallbackAsync()
+    - In the browser, each service has a number in parentheses after its name
+      - This is the application instance index
+    - Refresh the frontend service several times and the middleware service's instance index should change
+- [Circuit Breaker](https://steeltoe.io/docs/steeltoe-circuitbreaker/) Demonstration
   - Show the Circuit Breaker Dashboard
+    - Note that all the circuits are closed
+  - Show code changes needed to implement circuit breaker
+    - Steeltoe.CircuitBreaker.HystrixCore NuGet package
+    - Show AddHystrixCommand() & AddHystrixMetricsStream() in Startup.cs
+    - GetUpstreamContentCommand class that derives from HystrixCommand
+      - Discuss RunAsync() vs RunFallbackAsync()
   - Demonstrate a circuit opening
-    - `cf stop middleware`
+    - Kill one of the services: `cf stop middleware`
     - Refresh the frontend service a few times
-      - Middleware displays "Service temporarily unavailable"
+      - Middleware becomes red, backend service is no longer being called
       - Dashboard shows that circuit remains closed
       - While circuit is closed, each call to middleware still attempts to execute RunAsync() but, when RunAsync() fails, RunFallbackAsync() is invoked
-    - Refresh the frontend service until middleware circuit flips open
+        - Consumers of the service see the response from RunFallbackAsync() instead of an error
+    - Now refresh the frontend service repeatedly until middleware circuit flips open
       - Dashboard shows that circuit is open
-      - While circuit is open, each call to middleware is "short circuited" and only RunFallbackAsync() is invoked
-    - `cf start middleware`
+      - While circuit is open, almost all calls to middleware are "short circuited" and only RunFallbackAsync() is invoked
+        - After some time, the circuit will enter a "half-open" state
+        - In this state, a single request is allowed to pass through and, if the request succeeds, the circuit will close
+    - Restart the service that was killed: `cf start middleware`
     - Refresh the frontend service until middleware circuit closes again
     - Dashboard shows the circuit is now open again
     - Service is restored, each call to middleware again calls RunAsync()
