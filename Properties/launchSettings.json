@@ -41,7 +41,7 @@
         "spring__application__name": "backend",
         "eureka__instance__port": "5100"
       },
-      "applicationUrl": "http://localhost:5200"
+      "applicationUrl": "http://localhost:5100"
     }
   }
 }

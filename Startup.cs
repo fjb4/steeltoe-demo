@@ -44,7 +44,7 @@ namespace SteeltoeDemo
             app.Run(async context =>
             {
                 var appName = Configuration["spring:application:name"];
-                var appInstanceIndex = GetAppInstanceIndex();
+                var appInstanceIndex = Environment.GetEnvironmentVariable("CF_INSTANCE_INDEX");
 
                 // get this application's configuration from config server
                 var color = Configuration["color"];
@@ -71,7 +71,10 @@ namespace SteeltoeDemo
             var sb = new StringBuilder();
 
             sb.AppendLine($"<div style='border-style: solid; border-color: {color}; border-width: 1em; padding: 0.5em;'>");
-            sb.AppendLine($"<h1 style='margin-top: 0;'>{appName}{appInstanceIndex}</h1>");
+            sb.AppendLine($"<h1 style='margin-top: 0;'>{appName}</h1>");
+
+            if (!string.IsNullOrWhiteSpace(appInstanceIndex)) sb.AppendLine($"Instance: <strong>{appInstanceIndex}</strong><br/><br/>");
+
             sb.AppendLine($"Color: <strong>{color}</strong><br/>");
 
             if (!string.IsNullOrWhiteSpace(upstreamHost)) sb.AppendLine($"Upstream Host: <strong>{upstreamHost}</strong><br/>");
@@ -85,12 +88,6 @@ namespace SteeltoeDemo
             }
 
             return sb.ToString();
-        }
-
-        private static string GetAppInstanceIndex()
-        {
-            var index = Environment.GetEnvironmentVariable("CF_INSTANCE_INDEX");
-            return !string.IsNullOrWhiteSpace(index) ? $" ({index})" : string.Empty;
         }
     }
 }

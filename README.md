@@ -5,10 +5,8 @@ This repository contains code that demonstrates the use of [Steeltoe](https://st
 Note that the demonstration of Config Server retrieves its configuration from the https://github.com/fjb4/steeltoe-config-repo repository.
 
 TODO
-- Remove one of the services (middleware?)
 - Rename services?
-- Make sure we explain jsontest.com
-- Break into mutiple git repos
+- Break into mutiple git repos?
   - Repo for the service itself
   - Repo for service creation
     - docker-compose.yml
@@ -29,12 +27,15 @@ TODO
       - Unix Bash: `export BUILD=LOCAL`
       - Windows CMD: `set BUILD=LOCAL`
     - `dotnet watch run --launch-profile=backend`
-    - When started, backend service should be available at `http://localhost:5100`
   - Open a second terminal window
     - Set the "BUILD" environment variable to have the value "LOCAL"
     - `dotnet watch run --launch-profile=frontend`
-    - When started, frontend service should be available at `http://localhost:5000`
-- TODO: Show URLs for services & move service URLs here
+- URLs
+  - Frontend Service: `http://localhost:5000`
+  - Backend Service: `http://localhost:5100`
+  - Config Server: `http://localhost:8888`
+  - Service Registry: `http://localhost:8761`
+  - Circuit Breaker Dashboard: `http://localhost:7979`
 
 
 ## How to Run on Cloud Foundry
@@ -59,6 +60,8 @@ TODO
 - Demonstrate backend service in browser
     - Draws a block containing information about the service
     - Concatenates any information received from its upstream host
+      - For backend, upstream host is date.jsontest.com
+      - Public service that returns date/time as JSON
 - Give high-level overview of service implementation
     - Only 3 C# files
         - Program.cs
@@ -82,10 +85,10 @@ TODO
     - AddConfigServer() in Program.cs
     - appsettings.json can be used to point to config server location
     - Retrieving configuration values is standard .NET syntax
-- Demonstrate other service instances 
-  - Show backend, middleware, then frontend in browser
+- Demonstrate other service instance
+  - Show backend, then frontend in browser
   - Design allows services to be chained together
-      - Frontend -> middleware -> backend -> date.jsontest.com
+      - Frontend -> backend -> date.jsontest.com
       - Multiple instances of the same service with different configurations
 - [Service Discovery](https://steeltoe.io/docs/steeltoe-discovery/) Demonstration
   - How are the different service instances able to communicate?
@@ -96,13 +99,13 @@ TODO
     - Steeltoe.Discovery.ClientCore NuGet package
     - Show AddDiscoveryClient() in Startup.cs
     - HttpClient has been augmented with DiscoveryHttpClientHandler in GetUpstreamContentCommand class
-  - Run multiple instances of the middleware service
-    - `cf scale middleware -i 3`
+  - Run multiple instances of the backend service
+    - `cf scale backend -i 3`
   - Wait for additional service instances to appear in service registry
-  - Show how calls to middleware service are load balanced across the multiple service instances
+  - Show how calls to backend service are load balanced across the multiple service instances
     - In the browser, each service has a number in parentheses after its name
       - This is the application instance index
-    - Refresh the frontend service several times and the middleware service's instance index should change
+    - Refresh the frontend service several times and the backend's instance index should change
 - [Circuit Breaker](https://steeltoe.io/docs/steeltoe-circuitbreaker/) Demonstration
   - Show the Circuit Breaker Dashboard
     - Note that all the circuits are closed
@@ -112,22 +115,22 @@ TODO
     - GetUpstreamContentCommand class that derives from HystrixCommand
       - Discuss RunAsync() vs RunFallbackAsync()
   - Demonstrate a circuit opening
-    - Kill one of the services: `cf stop middleware`
+    - Kill one of the services: `cf stop backend`
     - Refresh the frontend service a few times
-      - Middleware becomes red, backend service is no longer being called
+      - Backend becomes red, backend service is no longer being called
       - Dashboard shows that circuit remains closed
-      - While circuit is closed, each call to middleware still attempts to execute RunAsync() but, when RunAsync() fails, RunFallbackAsync() is invoked
+      - While circuit is closed, each call to backend still attempts to execute RunAsync() but, when RunAsync() fails, RunFallbackAsync() is invoked
         - Consumers of the service see the response from RunFallbackAsync() instead of an error
-    - Now refresh the frontend service repeatedly until middleware circuit flips open
+    - Now refresh the frontend service repeatedly until backend circuit flips open
       - Dashboard shows that circuit is open
-      - While circuit is open, almost all calls to middleware are "short circuited" and only RunFallbackAsync() is invoked
+      - While circuit is open, almost all calls to backend are "short circuited" and only RunFallbackAsync() is invoked
         - After some time, the circuit will enter a "half-open" state
         - In this state, a single request is allowed to pass through and, if the request succeeds, the circuit will close
         - Config
           - requestVolumeThreshold: Minimum number of requests in a rolling window that will trip the circuit (20)
           - sleepWindowInMilliseconds: Amount of time, after tripping the circuit, to reject requests before allowing attempts again (5000)
           - errorThresholdPercentage: Error percentage at or above which the circuit should trip open and start short-circuiting requests to fallback logic (50)
-    - Restart the service that was killed: `cf start middleware`
-    - Refresh the frontend service until middleware circuit closes again
+    - Restart the service that was killed: `cf start backend`
+    - Refresh the frontend service until backend circuit closes again
     - Dashboard shows the circuit is now open again
-    - Service is restored, each call to middleware again calls RunAsync()
+    - Service is restored, each call to backend again calls RunAsync()
