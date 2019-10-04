@@ -15,21 +15,6 @@ applications:
       - myDiscoveryService
       - myConfigServer
       - myHystrixService
-  - name: middleware
-    path: .
-    memory: 256M
-    disk_quota: 256M
-    instances: 1
-    random-route: true
-    buildpacks:
-      - dotnet_core_buildpack
-    env:
-      ASPNETCORE_ENVIRONMENT: Development
-      "spring:application:name": middleware
-    services:
-      - myDiscoveryService
-      - myConfigServer
-      - myHystrixService
   - name: backend
     path: .
     memory: 256M

@@ -4,6 +4,17 @@ This repository contains code that demonstrates the use of [Steeltoe](https://st
 
 Note that the demonstration of Config Server retrieves its configuration from the https://github.com/fjb4/steeltoe-config-repo repository.
 
+TODO
+- Remove one of the services (middleware?)
+- Rename services?
+- Make sure we explain jsontest.com
+- Break into mutiple git repos
+  - Repo for the service itself
+  - Repo for service creation
+    - docker-compose.yml
+    - config-server-json
+    - Create readme containing service creation parts of readme below
+
 ## How to Run with Docker (local)
 - Prerequisites
   - [.NET Core SDK](https://dotnet.microsoft.com/download) (tested with version 2.2)
@@ -18,15 +29,12 @@ Note that the demonstration of Config Server retrieves its configuration from th
       - Unix Bash: `export BUILD=LOCAL`
       - Windows CMD: `set BUILD=LOCAL`
     - `dotnet watch run --launch-profile=backend`
-    - When started, backend service should be available at `http://localhost:5200`
+    - When started, backend service should be available at `http://localhost:5100`
   - Open a second terminal window
-    - Set the "BUILD" environment variable to have the value "LOCAL"
-    - `dotnet watch run --launch-profile=middleware`
-    - When started, middleware service should be available at `http://localhost:5100`
-  - Open a third terminal window
     - Set the "BUILD" environment variable to have the value "LOCAL"
     - `dotnet watch run --launch-profile=frontend`
     - When started, frontend service should be available at `http://localhost:5000`
+- TODO: Show URLs for services & move service URLs here
 
 
 ## How to Run on Cloud Foundry
@@ -115,6 +123,10 @@ Note that the demonstration of Config Server retrieves its configuration from th
       - While circuit is open, almost all calls to middleware are "short circuited" and only RunFallbackAsync() is invoked
         - After some time, the circuit will enter a "half-open" state
         - In this state, a single request is allowed to pass through and, if the request succeeds, the circuit will close
+        - Config
+          - requestVolumeThreshold: Minimum number of requests in a rolling window that will trip the circuit (20)
+          - sleepWindowInMilliseconds: Amount of time, after tripping the circuit, to reject requests before allowing attempts again (5000)
+          - errorThresholdPercentage: Error percentage at or above which the circuit should trip open and start short-circuiting requests to fallback logic (50)
     - Restart the service that was killed: `cf start middleware`
     - Refresh the frontend service until middleware circuit closes again
     - Dashboard shows the circuit is now open again
