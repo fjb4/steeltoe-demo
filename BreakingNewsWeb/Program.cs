@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Steeltoe.Extensions.Configuration.CloudFoundry;
+using Steeltoe.Extensions.Configuration.ConfigServer;
 
 namespace BreakingNewsWeb
 {
@@ -11,11 +12,15 @@ namespace BreakingNewsWeb
             BuildWebHost(args).Run();
         }
 
-        private static IWebHost BuildWebHost(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
-                    .UseCloudFoundryHosting()
-                    .AddCloudFoundry()
-                    .UseStartup<Startup>()
-                    .Build();
+        private static IWebHost BuildWebHost(string[] args)
+        {
+            var builder = WebHost.CreateDefaultBuilder(args);
+            builder = builder.AddConfigServer();
+
+            return CloudFoundryHostBuilderExtensions.UseCloudFoundryHosting(builder)
+                .AddCloudFoundry()
+                .UseStartup<Startup>()
+                .Build();
+        }
     }
 }

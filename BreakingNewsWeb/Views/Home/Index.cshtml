@@ -1,15 +1,15 @@
-﻿@model BreakingNewsWeb.Models.Headline
+﻿@model BreakingNewsWeb.Models.HomeViewModel
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Breaking News</title>
+    <title>@Model.Title</title>
 </head>
 <body>
-    <h1>Breaking News:</h1>
-    <h2>@Model.Text</h2>
-    <button onclick="window.location.reload();" style="font-size: 20px;">Get Latest Headlines</button>
+    <h1>@Model.Title</h1>
+    <h2>@Model.HeadlineText</h2>
+    <button onclick="window.location.reload();" style="font-size: 20px; color: @Model.ButtonColor; background-color: @Model.ButtonBackgroundColor">@Model.ButtonText</button>
 </body>
 </html>
