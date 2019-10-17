@@ -1,0 +1,15 @@
+﻿@model HeadlinesShared.Headline
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fake Headlines</title>
+</head>
+<body>
+    <h1>Breaking News:</h1>
+    <h2>@Model.Text</h2>
+    <button onclick="window.location.reload();" style="font-size: 20px;">Get Latest News</button>
+</body>
+</html>

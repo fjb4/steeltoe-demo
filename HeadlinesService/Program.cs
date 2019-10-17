@@ -1,29 +1,25 @@
-﻿using Microsoft.AspNetCore;
+using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Steeltoe.Extensions.Configuration.CloudFoundry;
-using Steeltoe.Extensions.Configuration.ConfigServer;
-using Steeltoe.Extensions.Configuration.PlaceholderCore;
 
-namespace SteeltoeDemo
+namespace HeadlinesService
 {
     public class Program
     {
         public static void Main(string[] args)
         {
-            CreateWebHostBuilder(args).Build().Run();
+            BuildWebHost(args).Run();
         }
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args)
-        {
-            var builder = WebHost.CreateDefaultBuilder(args);
-            builder = CloudFoundryHostBuilderExtensions.UseCloudFoundryHosting(builder);
-
-            return builder.AddCloudFoundry()
-                .AddPlaceholderResolver()
-                .AddConfigServer(GetLoggerFactory())
-                .UseStartup<Startup>();
+        private static IWebHost BuildWebHost(string[] args)
+        {            
+            return WebHost.CreateDefaultBuilder(args)
+            .UseCloudFoundryHosting()
+            .AddCloudFoundry()
+            .UseStartup<Startup>()
+            .Build();
         }
 
         private static ILoggerFactory GetLoggerFactory()
