@@ -2,12 +2,12 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-namespace HeadlinesWeb.Controllers
+namespace BreakingNewsWeb.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
         private readonly GetRandomHeadlineCommand _getRandomHeadlineCommand;
+        private readonly ILogger<HomeController> _logger;
 
         public HomeController(ILogger<HomeController> logger, GetRandomHeadlineCommand getRandomHeadlineCommand)
         {

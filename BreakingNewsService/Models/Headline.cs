@@ -1,4 +1,4 @@
-namespace HeadlinesShared
+namespace BreakingNewsService.Models
 {
     public class Headline
     {

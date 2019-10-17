@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Steeltoe.Extensions.Configuration.CloudFoundry;
 
-namespace HeadlinesService
+namespace BreakingNewsService
 {
     public class Program
     {

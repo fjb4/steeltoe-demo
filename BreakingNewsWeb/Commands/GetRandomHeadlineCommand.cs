@@ -1,11 +1,11 @@
 using System.Net.Http;
 using System.Threading.Tasks;
-using HeadlinesShared;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Steeltoe.CircuitBreaker.Hystrix;
+using BreakingNewsWeb.Models;
 
-namespace HeadlinesWeb.Controllers
+namespace BreakingNewsWeb.Controllers
 {
     public class GetRandomHeadlineCommand : HystrixCommand<Headline>
     {
@@ -22,9 +22,9 @@ namespace HeadlinesWeb.Controllers
 
         protected override async Task<Headline> RunAsync()
         {
-            using (var httpClient = _httpClientFactory.CreateClient("headlines"))
+            using (var httpClient = _httpClientFactory.CreateClient("breaking-news"))
             {
-                var content = await httpClient.GetStringAsync("http://headlines-service/api/headline/random");
+                var content = await httpClient.GetStringAsync("http://breaking-news-service/api/headline/random");
                 return JsonConvert.DeserializeObject<Headline>(content);
             }
         }

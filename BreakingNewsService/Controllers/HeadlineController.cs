@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using HeadlinesShared;
+using BreakingNewsService.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-namespace HeadlinesService.Controllers
+namespace BreakingNewsService.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
@@ -30,12 +30,12 @@ namespace HeadlinesService.Controllers
             new Headline {Id = 15, Text = "Romantic Gesture Too Expensive To Waste On Current Girlfriend"},
             new Headline {Id = 16, Text = "Miracle Of Birth Occurs For 83 Billionth Time "},
             new Headline {Id = 17, Text = "I’m Like A Chocoholic, But For Booze"},
-            new Headline {Id = 18, Text = "Wealthy Teen Nearly Experiences Consequence"},
+            new Headline {Id = 18, Text = "Wealthy Teen Nearly Experiences Consequence"}
         };
 
-        private readonly Random _random = new Random();
-
         private readonly ILogger<HeadlineController> _logger;
+
+        private readonly Random _random = new Random();
 
         public HeadlineController(ILogger<HeadlineController> logger)
         {

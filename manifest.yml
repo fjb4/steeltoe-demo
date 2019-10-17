@@ -1,7 +1,7 @@
 ---
 applications:
-  - name: headlines-web
-    path: ./HeadlinesWeb/bin/Debug/netcoreapp2.2/publish
+  - name: breaking-news-web
+    path: ./BreakingNewsWeb
     memory: 256M
     disk_quota: 256M
     instances: 1
@@ -10,13 +10,13 @@ applications:
       - dotnet_core_buildpack
     env:
       ASPNETCORE_ENVIRONMENT: Development
-      "spring:application:name": headlines-web
+      "spring:application:name": breaking-news-web
     services:
       - myDiscoveryService
       - myConfigServer
       - myHystrixService
-  - name: headlines-service
-    path: ./HeadlinesService/bin/Debug/netcoreapp2.2/publish
+  - name: breaking-news-service
+    path: ./BreakingNewsService
     memory: 256M
     disk_quota: 256M
     instances: 1
@@ -25,8 +25,7 @@ applications:
       - dotnet_core_buildpack
     env:
       ASPNETCORE_ENVIRONMENT: Development
-      "spring:application:name": headlines-service
+      "spring:application:name": breaking-news-service
     services:
       - myDiscoveryService
       - myConfigServer
-      - myHystrixService

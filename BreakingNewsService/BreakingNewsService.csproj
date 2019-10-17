@@ -13,9 +13,5 @@
     <PackageReference Include="Steeltoe.Extensions.Configuration.ConfigServerCore" Version="2.3.0" />
     <PackageReference Include="Steeltoe.Extensions.Configuration.PlaceholderCore" Version="2.3.0" />
   </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\HeadlinesShared\HeadlinesShared.csproj" />
-  </ItemGroup>
   
 </Project>

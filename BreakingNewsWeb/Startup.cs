@@ -1,5 +1,5 @@
 using System;
-using HeadlinesWeb.Controllers;
+using BreakingNewsWeb.Controllers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -9,7 +9,7 @@ using Steeltoe.CircuitBreaker.Hystrix;
 using Steeltoe.Common.Http.Discovery;
 using Steeltoe.Discovery.Client;
 
-namespace HeadlinesWeb
+namespace BreakingNewsWeb
 {
     public class Startup
     {
@@ -28,10 +28,10 @@ namespace HeadlinesWeb
 
             services.AddTransient<DiscoveryHttpMessageHandler>();
 
-            services.AddHttpClient("headlines", client => { client.BaseAddress = new Uri("https://headlines-service"); }).AddHttpMessageHandler<DiscoveryHttpMessageHandler>();
+            services.AddHttpClient("breaking-news", client => { client.BaseAddress = new Uri("https://breaking-news-service"); }).AddHttpMessageHandler<DiscoveryHttpMessageHandler>();
 
             // Add Hystrix command GetRandomHeadline to Hystrix group
-            services.AddHystrixCommand<GetRandomHeadlineCommand>("Headlines", Configuration);
+            services.AddHystrixCommand<GetRandomHeadlineCommand>("BreakingNews", Configuration);
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
@@ -60,8 +60,8 @@ namespace HeadlinesWeb
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    "default",
+                    "{controller=Home}/{action=Index}/{id?}");
             });
 
             app.UseDiscoveryClient();
