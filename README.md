@@ -4,15 +4,6 @@ This repository contains code that demonstrates the use of [Steeltoe](https://st
 
 Note that the demonstration of Config Server retrieves its configuration from the https://github.com/fjb4/steeltoe-config-repo repository.
 
-TODO
-- Rename services?
-- Break into mutiple git repos?
-  - Repo for the service itself
-  - Repo for service creation
-    - docker-compose.yml
-    - config-server-json
-    - Create readme containing service creation parts of readme below
-
 ## How to Run with Docker (local)
 - Prerequisites
   - [.NET Core SDK](https://dotnet.microsoft.com/download) (tested with version 2.2)
@@ -22,17 +13,16 @@ TODO
 - Stop Steeltoe services
   - `docker-compose down`
 - Run
-  - Open a terminal window
+  - Open a terminal window and move to the "BreakingNewsService" directory
     - Set the "BUILD" environment variable to have the value "LOCAL"
       - Unix Bash: `export BUILD=LOCAL`
       - Windows CMD: `set BUILD=LOCAL`
-    - `dotnet watch run --launch-profile=backend`
-  - Open a second terminal window
+    - `dotnet watch run`
+  - Open a second terminal window and move to the "BreakingNewsWeb" directory
     - Set the "BUILD" environment variable to have the value "LOCAL"
-    - `dotnet watch run --launch-profile=frontend`
-- URLs
-  - Frontend Service: `http://localhost:5000`
-  - Backend Service: `http://localhost:5100`
+    - `dotnet watch run`
+  - View the Breaking News web site at `http://localhost:5000`
+- Steeltoe service URLs
   - Config Server: `http://localhost:8888`
   - Service Registry: `http://localhost:8761`
   - Circuit Breaker Dashboard: `http://localhost:7979`
@@ -53,43 +43,18 @@ TODO
 
 
 ## Demo Script (Cloud Foundry)
-  - This is a very simple ASP.NET web project (created with `dotnet new web`)
-    - Not MVC, not API
-    - All incoming requests are handled in Startup.Configure()
-    - Intent is to distill code down to minimum necessary for demonstrating Steeltoe
-- Demonstrate backend service in browser
-    - Draws a block containing information about the service
-    - Concatenates any information received from its upstream host
-      - For backend, upstream host is date.jsontest.com
-      - Public service that returns date/time as JSON
-- Give high-level overview of service implementation
-    - Only 3 C# files
-        - Program.cs
-        - Startup.cs
-        - GetUpstreamContentCommand.cs
-    - Requests are handled in Start.Configure()
-    - Retrieves color & upstream host from configuration
-        - Should look familiar, code is using the normal .NET configuration API
-    - Renders HTML that displays service's name & color
-    - Calls upstream host and concatenates its response
-        - Acknowledge that the code used to retrieve the upstream host's content is in a separate GetUpstreamContentCommand class; the reasons for this will be discussed later 
+- Give brief demonstation of Breaking News website & implementation
+  - Frontend is ASP.NET Core MVC
+  - Backend is ASP.NET Core WebApi
 - [Config Server](https://steeltoe.io/docs/steeltoe-configuration/#2-0-config-server-provider) Demonstration
   - Utilizes Spring Cloud Config Server
-    - Supports different backends: file system, git repo, database, others
     - Config Server itself must be configured to tell it where to pull configuration data
       - Show config-server.json file
   - Show the [configuration repo](https://github.com/fjb4/steeltoe-config-repo)
     - Application's name determines which YAML file is used
   - Show code changes necessary to support config server
     - Steeltoe.Extensions.Configuration.ConfigServerCore NuGet package
-    - AddConfigServer() in Program.cs
-    - appsettings.json can be used to point to config server location
     - Retrieving configuration values is standard .NET syntax
-- Demonstrate other service instance
-  - Show backend, then frontend in browser
-  - Design allows services to be chained together
-      - Frontend -> backend -> date.jsontest.com
-      - Multiple instances of the same service with different configurations
 - [Service Discovery](https://steeltoe.io/docs/steeltoe-discovery/) Demonstration
   - How are the different service instances able to communicate?
     - Clients don't know fully qualified URL of upstream host
