@@ -2,8 +2,7 @@
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @{
     var headlineStyles = new[] {"hl3", "hl5", "hl1", "hl3", "hl1"};
-    var subTitles = new[] {"by JOHANN WOLFGANG VON GOETHE", "The crowd seemed to grow", "Let go your conscious self and act on instinct", "A thousand unknown plants", "by FRANZ KAFKA"};
-    var subTitleStyles = new[] {"hl4", "hl6", "hl2", "hl4", "hl4"};
+    var subTitles = new[] {"JOHANN WOLFGANG VON GOETHE", "RHONDA BRADLEY", "ROXANNE ALVAREZ", "CONRAD WEBER", "FRANZ KAFKA"};
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -33,11 +32,12 @@
                 <div class="head">
                     <span class="headline @(headlineStyles[i])">@Model.Headlines.ElementAt(i)</span>
                     <p>
-                        <span class="headline @(subTitleStyles[i])">@subTitles[i]</span>
+                        <span class="headline hl4">by @subTitles[i]</span>
                     </p>
                 </div>
-                When, while the lovely valley teems with vapour around me, and the meridian sun strikes the upper surface of the impenetrable foliage of my trees, and but a few stray gleams steal into the inner sanctuary, I throw myself down among the tall grass by the trickling stream;
-                <p>and, as I lie close to the earth, a thousand unknown plants are noticed by me: when I hear the buzz of the little world among the stalks, and grow familiar with the countless indescribable forms of the insects and flies, then I feel the presence of the Almighty, who formed us in his own image, and the breath of that universal love which bears and sustains us, as it floats around us in an eternity of bliss; and then, my friend, when darkness overspreads my eyes, and heaven and earth seem to dwell in my soul and absorb its power, like the form of a beloved mistress, then I often think with longing, Oh, would I could describe these conceptions, could impress upon paper all that is living so full and warm within me, that it might be the mirror of my soul, as my soul is the mirror of the infinite God!</p>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quae in controversiam veniunt, de iis, si placet, disseramus. Itaque primos congressus copulationesque et consuetudinum instituendarum voluntates fieri propter voluptatem; Quae diligentissime contra Aristonem dicuntur a Chryippo. Te ipsum, dignissimum maioribus tuis, voluptasne induxit, ut adolescentulus eriperes P. Tum ille timide vel potius verecunde: Facio, inquit.</p>
+                <p>Quamquam te quidem video minime esse deterritum. Dempta enim aeternitate nihilo beatior Iuppiter quam Epicurus; Idemne, quod iucunde? Nunc ita separantur, ut disiuncta sint, quo nihil potest esse perversius. Obsecro, inquit, Torquate, haec dicit Epicurus? Sed quae tandem ista ratio est? Tum ille: Tu autem cum ipse tantum librorum habeas, quos hic tandem requiris? Prave, nequiter, turpiter cenabat; Quis non odit sordidos, vanos, leves, futtiles?</p>
+                <p>Duo Reges: constructio interrete. Quid dubitas igitur mutare principia naturae? Theophrasti igitur, inquit, tibi liber ille placet de beata vita? Ut id aliis narrare gestiant? Quae sequuntur igitur? Dic in quovis conventu te omnia facere, ne doleas. Idemque diviserunt naturam hominis in animum et corpus.</p>
             </div>
         }
     </div>
