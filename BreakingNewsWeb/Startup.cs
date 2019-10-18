@@ -1,4 +1,5 @@
 using System;
+using BreakingNewsWeb.Commands;
 using BreakingNewsWeb.Controllers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -31,7 +32,7 @@ namespace BreakingNewsWeb
             services.AddHttpClient("breaking-news", client => { client.BaseAddress = new Uri("https://breaking-news-service"); }).AddHttpMessageHandler<DiscoveryHttpMessageHandler>();
 
             // Add Hystrix command GetRandomHeadline to Hystrix group
-            services.AddHystrixCommand<GetRandomHeadlineCommand>("BreakingNews", Configuration);
+            services.AddHystrixCommand<GetHeadlinesCommand>("BreakingNews", Configuration);
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 

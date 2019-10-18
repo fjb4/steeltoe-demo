@@ -1,15 +1,46 @@
 ﻿@model BreakingNewsWeb.Models.HomeViewModel
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    var headlineStyles = new[] {"hl3", "hl5", "hl1", "hl3", "hl1"};
+    var subTitles = new[] {"by JOHANN WOLFGANG VON GOETHE", "The crowd seemed to grow", "Let go your conscious self and act on instinct", "A thousand unknown plants", "by FRANZ KAFKA"};
+    var subTitleStyles = new[] {"hl4", "hl6", "hl2", "hl4", "hl4"};
+}
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href='https://fonts.googleapis.com/css?family=Playfair+Display:400,700,900,400italic,700italic,900italic|Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="~/css/newspaper.css">
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>@Model.Title</title>
 </head>
 <body>
-    <h1>@Model.Title</h1>
-    <h2>@Model.HeadlineText</h2>
-    <button onclick="window.location.reload();" style="font-size: 20px; color: @Model.ButtonColor; background-color: @Model.ButtonBackgroundColor">@Model.ButtonText</button>
+<div class="head">
+    <div class="headerobjectswrapper">
+        <div class="weatherforcastbox">
+            <span style="font-style: italic;">Weather forecast for the next 24 hours: Plenty of Sunshine</span><br><span>Wind: 7km/h SSE; Ther: 21°C; Hum: 82%</span>
+        </div>
+        <header>@Model.Title</header>
+    </div>
+
+    <div class="subhead">SAINT LOUIS, MO - @(DateTime.Now.ToString("dddd MMMM d, yyyy")) - Seven Pages</div>
+</div>
+<div class="content">
+    <div class="columns">
+        @for (var i = 0; i < Model.Headlines.Count; i++)
+        {
+            <div class="column">
+                <div class="head">
+                    <span class="headline @(headlineStyles[i])">@Model.Headlines.ElementAt(i)</span>
+                    <p>
+                        <span class="headline @(subTitleStyles[i])">@subTitles[i]</span>
+                    </p>
+                </div>
+                When, while the lovely valley teems with vapour around me, and the meridian sun strikes the upper surface of the impenetrable foliage of my trees, and but a few stray gleams steal into the inner sanctuary, I throw myself down among the tall grass by the trickling stream;
+                <p>and, as I lie close to the earth, a thousand unknown plants are noticed by me: when I hear the buzz of the little world among the stalks, and grow familiar with the countless indescribable forms of the insects and flies, then I feel the presence of the Almighty, who formed us in his own image, and the breath of that universal love which bears and sustains us, as it floats around us in an eternity of bliss; and then, my friend, when darkness overspreads my eyes, and heaven and earth seem to dwell in my soul and absorb its power, like the form of a beloved mistress, then I often think with longing, Oh, would I could describe these conceptions, could impress upon paper all that is living so full and warm within me, that it might be the mirror of my soul, as my soul is the mirror of the infinite God!</p>
+            </div>
+        }
+    </div>
+</div>
 </body>
 </html>

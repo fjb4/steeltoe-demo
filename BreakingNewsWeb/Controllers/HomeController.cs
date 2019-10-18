@@ -1,35 +1,47 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
+using BreakingNewsWeb.Commands;
+using BreakingNewsWeb.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using BreakingNewsWeb.Models;
 
 namespace BreakingNewsWeb.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly GetRandomHeadlineCommand _getRandomHeadlineCommand;
         private readonly IConfiguration _configuration;
+        private readonly GetHeadlinesCommand _getHeadlinesCommand;
 
-        public HomeController(IConfiguration configuration, GetRandomHeadlineCommand getRandomHeadlineCommand)
+        public HomeController(IConfiguration configuration, GetHeadlinesCommand getHeadlinesCommand)
         {
             _configuration = configuration;
-            _getRandomHeadlineCommand = getRandomHeadlineCommand;
+            _getHeadlinesCommand = getHeadlinesCommand;
         }
 
         public async Task<IActionResult> Index()
         {
-            var headline = await _getRandomHeadlineCommand.ExecuteAsync();
+            var columnCount = GetColumnCount();
+            var headlines = await _getHeadlinesCommand.ExecuteAsync(columnCount);
 
             var model = new HomeViewModel
             {
-                Title = _configuration["title"] ?? "<No Title>",
-                ButtonText = _configuration["buttonText"] ?? "<No Button Text>",
-                ButtonColor = _configuration["buttonColor"] ?? string.Empty,
-                ButtonBackgroundColor = _configuration["buttonBackgroundColor"] ?? string.Empty,
-                HeadlineText = headline?.Text
+                Title = GetNewspaperTitle(),
+                Headlines = headlines.Select(h => h.Text).ToList()
             };
 
             return View(model);
+        }
+
+        private string GetNewspaperTitle()
+        {
+            return _configuration["title"] ?? "<No Title>";
+        }
+
+        private int GetColumnCount()
+        {
+            var columnCountStr = _configuration["columnCount"];
+            return !string.IsNullOrWhiteSpace(columnCountStr) ? Convert.ToInt32(columnCountStr) : 1;
         }
     }
 }
