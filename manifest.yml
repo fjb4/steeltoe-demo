@@ -5,7 +5,7 @@ applications:
     memory: 256M
     disk_quota: 256M
     instances: 1
-    random-route: true
+    random-route: false
     buildpacks:
       - dotnet_core_buildpack
     env:
@@ -20,7 +20,7 @@ applications:
     memory: 256M
     disk_quota: 256M
     instances: 1
-    random-route: true
+    random-route: false
     buildpacks:
       - dotnet_core_buildpack
     env:
