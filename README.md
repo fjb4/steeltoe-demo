@@ -14,12 +14,11 @@ Note that the demonstration of Config Server retrieves its configuration from th
   - `docker-compose down`
 - Run
   - Open a terminal window and move to the "BreakingNewsService" directory
-    - Set the "BUILD" environment variable to have the value "LOCAL"
-      - Unix Bash: `export BUILD=LOCAL`
-      - Windows CMD: `set BUILD=LOCAL`
     - `dotnet watch run`
   - Open a second terminal window and move to the "BreakingNewsWeb" directory
     - Set the "BUILD" environment variable to have the value "LOCAL"
+      - Unix Bash: `export BUILD=LOCAL`
+      - Windows CMD: `set BUILD=LOCAL`
     - `dotnet watch run`
   - View the Breaking News web site at `http://localhost:5000`
 - Steeltoe service URLs
@@ -44,8 +43,8 @@ Note that the demonstration of Config Server retrieves its configuration from th
 
 ## Demo Script (Cloud Foundry)
 - Give brief demonstation of Breaking News website & implementation
-  - Frontend is ASP.NET Core MVC
-  - Backend is ASP.NET Core WebApi
+  - [Backend](http://breaking-news-service.cfapps.io/api/headline) is ASP.NET Core WebApi
+  - [Frontend](http://breaking-news-web.cfapps.io) is ASP.NET Core MVC
 - [Config Server](https://steeltoe.io/docs/steeltoe-configuration/#2-0-config-server-provider) Demonstration
   - Utilizes Spring Cloud Config Server
     - Config Server itself must be configured to tell it where to pull configuration data
@@ -65,12 +64,9 @@ Note that the demonstration of Config Server retrieves its configuration from th
     - Show AddDiscoveryClient() in Startup.cs
     - HttpClient has been augmented with DiscoveryHttpClientHandler in GetUpstreamContentCommand class
   - Run multiple instances of the backend service
-    - `cf scale backend -i 3`
+    - `cf scale breaking-news-service -i 3`
   - Wait for additional service instances to appear in service registry
-  - Show how calls to backend service are load balanced across the multiple service instances
-    - In the browser, each service has a number in parentheses after its name
-      - This is the application instance index
-    - Refresh the frontend service several times and the backend's instance index should change
+  - Calls to backend service are load balanced across the multiple service instances
 - [Circuit Breaker](https://steeltoe.io/docs/steeltoe-circuitbreaker/) Demonstration
   - Show the Circuit Breaker Dashboard
     - Note that all the circuits are closed
@@ -80,7 +76,7 @@ Note that the demonstration of Config Server retrieves its configuration from th
     - GetUpstreamContentCommand class that derives from HystrixCommand
       - Discuss RunAsync() vs RunFallbackAsync()
   - Demonstrate a circuit opening
-    - Kill one of the services: `cf stop backend`
+    - Kill one of the services: `cf stop breaking-news-service`
     - Refresh the frontend service a few times
       - Backend becomes red, backend service is no longer being called
       - Dashboard shows that circuit remains closed
@@ -95,7 +91,7 @@ Note that the demonstration of Config Server retrieves its configuration from th
           - requestVolumeThreshold: Minimum number of requests in a rolling window that will trip the circuit (20)
           - sleepWindowInMilliseconds: Amount of time, after tripping the circuit, to reject requests before allowing attempts again (5000)
           - errorThresholdPercentage: Error percentage at or above which the circuit should trip open and start short-circuiting requests to fallback logic (50)
-    - Restart the service that was killed: `cf start backend`
+    - Restart the service that was killed: `cf start breaking-news-service`
     - Refresh the frontend service until backend circuit closes again
     - Dashboard shows the circuit is now open again
     - Service is restored, each call to backend again calls RunAsync()
