@@ -1,6 +1,6 @@
 using System;
-using BreakingNewsWeb.Commands;
-using BreakingNewsWeb.Controllers;
+using FakeNewsWeb.Controllers;
+using FakeNewsWeb.Commands;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -10,7 +10,7 @@ using Steeltoe.CircuitBreaker.Hystrix;
 using Steeltoe.Common.Http.Discovery;
 using Steeltoe.Discovery.Client;
 
-namespace BreakingNewsWeb
+namespace FakeNewsWeb
 {
     public class Startup
     {
@@ -29,10 +29,12 @@ namespace BreakingNewsWeb
 
             services.AddTransient<DiscoveryHttpMessageHandler>();
 
-            services.AddHttpClient("breaking-news", client => { client.BaseAddress = new Uri("https://breaking-news-service"); }).AddHttpMessageHandler<DiscoveryHttpMessageHandler>();
+            services.AddHttpClient("fake-news", client => {
+                client.BaseAddress = new Uri("https://fake-news-service");
+            }).AddHttpMessageHandler<DiscoveryHttpMessageHandler>();
 
             // Add Hystrix command GetRandomHeadline to Hystrix group
-            services.AddHystrixCommand<GetHeadlinesCommand>("BreakingNews", Configuration);
+            services.AddHystrixCommand<GetHeadlinesCommand>("FakeNews", Configuration);
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 

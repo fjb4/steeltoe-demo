@@ -5,7 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Steeltoe.Discovery.Client;
 
-namespace BreakingNewsService
+namespace FakeNewsService
 {
     public class Startup
     {

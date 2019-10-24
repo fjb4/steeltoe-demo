@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 using Steeltoe.Extensions.Configuration.CloudFoundry;
 using Steeltoe.Extensions.Configuration.ConfigServer;
 
-namespace BreakingNewsWeb
+namespace FakeNewsWeb
 {
     public class Program
     {

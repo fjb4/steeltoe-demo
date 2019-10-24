@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using BreakingNewsWeb.Commands;
-using BreakingNewsWeb.Models;
+using FakeNewsWeb.Commands;
+using FakeNewsWeb.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 
-namespace BreakingNewsWeb.Controllers
+namespace FakeNewsWeb.Controllers
 {
     public class HomeController : Controller
     {

@@ -1,4 +1,4 @@
-namespace BreakingNewsWeb.Models
+namespace FakeNewsWeb.Models
 {
     public class Headline
     {

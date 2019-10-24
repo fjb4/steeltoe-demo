@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace BreakingNewsWeb.Models
+namespace FakeNewsWeb.Models
 {
     public class HomeViewModel
     {

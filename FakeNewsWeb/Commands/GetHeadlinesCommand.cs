@@ -2,13 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
-using BreakingNewsWeb.Models;
+using FakeNewsWeb.Models;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Steeltoe.CircuitBreaker.Hystrix;
 
-namespace BreakingNewsWeb.Commands
+namespace FakeNewsWeb.Commands
 {
     public class GetHeadlinesCommand : HystrixCommand<ICollection<Headline>>
     {
@@ -39,9 +39,9 @@ namespace BreakingNewsWeb.Commands
         {
             ICollection<Headline> headlines;
             
-            using (var httpClient = _httpClientFactory.CreateClient("breaking-news"))
+            using (var httpClient = _httpClientFactory.CreateClient("fake-news"))
             {
-                var content = await httpClient.GetStringAsync($"http://breaking-news-service/api/headline/random/{_count}");
+                var content = await httpClient.GetStringAsync($"http://fake-news-service/api/headline/random/{_count}");
                 headlines = JsonConvert.DeserializeObject<List<Headline>>(content);
                 SetCache(headlines);
             }

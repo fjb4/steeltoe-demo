@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BreakingNewsService", "BreakingNewsService\BreakingNewsService.csproj", "{4D1CCB1F-89CF-4657-A794-F13DFBB08F31}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FakeNewsService", "FakeNewsService\FakeNewsService.csproj", "{4D1CCB1F-89CF-4657-A794-F13DFBB08F31}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BreakingNewsWeb", "BreakingNewsWeb\BreakingNewsWeb.csproj", "{59B72FAB-164C-4369-800E-070454B50334}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FakeNewsWeb", "FakeNewsWeb\FakeNewsWeb.csproj", "{59B72FAB-164C-4369-800E-070454B50334}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

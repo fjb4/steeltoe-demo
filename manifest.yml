@@ -1,7 +1,7 @@
 ---
 applications:
-  - name: breaking-news-web
-    path: ./BreakingNewsWeb
+  - name: fake-news-web
+    path: ./FakeNewsWeb
     memory: 256M
     disk_quota: 256M
     instances: 1
@@ -10,13 +10,13 @@ applications:
       - dotnet_core_buildpack
     env:
       ASPNETCORE_ENVIRONMENT: Development
-      "spring:application:name": breaking-news-web
+      "spring:application:name": fake-news-web
     services:
       - myDiscoveryService
       - myConfigServer
       - myHystrixService
-  - name: breaking-news-service
-    path: ./BreakingNewsService
+  - name: fake-news-service
+    path: ./FakeNewsService
     memory: 256M
     disk_quota: 256M
     instances: 1
@@ -25,7 +25,7 @@ applications:
       - dotnet_core_buildpack
     env:
       ASPNETCORE_ENVIRONMENT: Development
-      "spring:application:name": breaking-news-service
+      "spring:application:name": fake-news-service
     services:
       - myDiscoveryService
       - myConfigServer

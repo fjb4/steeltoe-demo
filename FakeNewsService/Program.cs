@@ -2,7 +2,7 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Steeltoe.Extensions.Configuration.CloudFoundry;
 
-namespace BreakingNewsService
+namespace FakeNewsService
 {
     public class Program
     {
