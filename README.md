@@ -42,38 +42,40 @@ Note that the demonstration of Config Server retrieves its configuration from th
 
 
 ## Demo Script (Cloud Foundry)
-- Give brief demonstation of Fake News website & implementation
-  - [Backend](http://fake-news-service.cfapps.io/api/headline) is ASP.NET Core WebApi
+- Goal
+  - Demonstration of using some Steeltoe features
+- Give brief overview of Fake News website & review its implementation
+  - Show the application running
   - [Frontend](http://fake-news-web.cfapps.io) is ASP.NET Core MVC
-- [Config Server](https://steeltoe.io/docs/steeltoe-configuration/#2-0-config-server-provider) Demonstration
+    - Show HomeController.Index() and view
+      - Pulls values from configuration and uses them in the Razor view
+      - Retrieves headlines from a REST endpoint and passes them to the view
+  - [Backend](http://fake-news-service.cfapps.io/api/headline) is ASP.NET Core WebApi
+    - Provides endpoint that returns a collection of randomly selected headlines
+- [Spring Config Provider](https://steeltoe.io/app-configuration/get-started/springconfig) Demonstration
   - Utilizes Spring Cloud Config Server
     - Config Server itself must be configured to tell it where to pull configuration data
       - Show config-server.json file
   - Show the [configuration repo](https://github.com/fjb4/steeltoe-config-repo)
     - Application's name determines which YAML file is used
-  - Show code changes necessary to support config server
-    - Steeltoe.Extensions.Configuration.ConfigServerCore NuGet package
-    - Retrieving configuration values is standard .NET syntax
-- [Service Discovery](https://steeltoe.io/docs/steeltoe-discovery/) Demonstration
+  - Code should look familiar; retrieving configuration values uses standard .NET configuration API
+    - Code is no different than retrieving config settings from an appSettings.json file
+- [Service Discovery](https://steeltoe.io/service-discovery/get-started/eureka) Demonstration
   - How are the different service instances able to communicate?
-    - Clients don't know fully qualified URL of upstream host
+    - Clients don't know fully qualified URL of other services
   - Show service registry with list of registered apps
     - This is the "phone book" that allows apps to lookup a service's URL
   - Show code changes necessary to implement service discovery
-    - Steeltoe.Discovery.ClientCore NuGet package
-    - Show AddDiscoveryClient() in Startup.cs
-    - HttpClient has been augmented with DiscoveryHttpClientHandler in GetUpstreamContentCommand class
+    - HttpClient has been augmented with DiscoveryHttpClientHandler in GetHeadlinesCommand class
   - Run multiple instances of the backend service
     - `cf scale fake-news-service -i 3`
   - Wait for additional service instances to appear in service registry
   - Calls to backend service are load balanced across the multiple service instances
-- [Circuit Breaker](https://steeltoe.io/docs/steeltoe-circuitbreaker/) Demonstration
+- [Circuit Breaker](https://steeltoe.io/circuit-breakers/get-started/breaker) Demonstration
   - Show the Circuit Breaker Dashboard
     - Note that all the circuits are closed
   - Show code changes needed to implement circuit breaker
-    - Steeltoe.CircuitBreaker.HystrixCore NuGet package
-    - Show AddHystrixCommand() & AddHystrixMetricsStream() in Startup.cs
-    - GetUpstreamContentCommand class that derives from HystrixCommand
+    - GetHeadlinesCommand class that derives from HystrixCommand
       - Discuss RunAsync() vs RunFallbackAsync()
   - Demonstrate a circuit opening
     - Kill one of the services: `cf stop fake-news-service`
@@ -87,11 +89,18 @@ Note that the demonstration of Config Server retrieves its configuration from th
       - While circuit is open, almost all calls to backend are "short circuited" and only RunFallbackAsync() is invoked
         - After some time, the circuit will enter a "half-open" state
         - In this state, a single request is allowed to pass through and, if the request succeeds, the circuit will close
-        - Config
-          - requestVolumeThreshold: Minimum number of requests in a rolling window that will trip the circuit (20)
-          - sleepWindowInMilliseconds: Amount of time, after tripping the circuit, to reject requests before allowing attempts again (5000)
-          - errorThresholdPercentage: Error percentage at or above which the circuit should trip open and start short-circuiting requests to fallback logic (50)
     - Restart the service that was killed: `cf start fake-news-service`
     - Refresh the frontend service until backend circuit closes again
     - Dashboard shows the circuit is now open again
     - Service is restored, each call to backend again calls RunAsync()
+- Steeltoe is a collection of tools for building .NET microservices
+  - Features & documentation available at https://steeltoe.io
+  - Start a Steeltoe project at https://start.steeltoe.io
+  - Able to run in the cloud or locally, using Docker
+  - This demonstration is available at https://github.com/fjb4/steeltoe-demo
+
+### Notes
+- Circuit breaker configuration settings
+  - requestVolumeThreshold: Minimum number of requests in a rolling window that will trip the circuit (20)
+  - sleepWindowInMilliseconds: Amount of time, after tripping the circuit, to reject requests before allowing attempts again (5000)
+  - errorThresholdPercentage: Error percentage at or above which the circuit should trip open and start short-circuiting requests to fallback logic (50)
