@@ -18,7 +18,7 @@ namespace FakeNewsWeb
         {
             var builder = WebHost.CreateDefaultBuilder(args);
 
-            // retrieve configuration from Config Server
+            // retrieve configuration from Spring Cloud Config Server
             builder = builder.AddConfigServer(GetLoggerFactory());
 
             // use the "PORT" env variable to set the port to listen on
