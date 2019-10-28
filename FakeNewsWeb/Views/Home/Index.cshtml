@@ -42,5 +42,19 @@
         }
     </div>
 </div>
+<script>
+    const params = (new URL(document.location)).searchParams;
+    const refreshIntervalParam = params.get("refresh");
+
+    if (refreshIntervalParam) {
+        const refreshIntervalSeconds = +refreshIntervalParam;
+
+        if (refreshIntervalSeconds) {
+            setTimeout(function() {
+                location.reload();
+            }, refreshIntervalSeconds * 1000);
+        }
+    }
+</script>
 </body>
 </html>

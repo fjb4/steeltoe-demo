@@ -37,7 +37,8 @@ namespace FakeNewsService.Controllers
 
         private readonly ILogger<HeadlineController> _logger;
 
-        private readonly Random _random = new Random();
+        private static readonly Random _random = new Random();
+        private static readonly object _randomLock = new object();
 
         public HeadlineController(ILogger<HeadlineController> logger)
         {
@@ -70,17 +71,20 @@ namespace FakeNewsService.Controllers
 
             var randomHeadlines = new List<Headline>(count);
 
-            for (var i = 0; i < count; i++)
+            lock (_randomLock)
             {
-                Headline headline;
-
-                do
+                for (var i = 0; i < count; i++)
                 {
-                    var index = _random.Next(0, Headlines.Length);
-                    headline = Headlines.ElementAt(index);
-                } while (randomHeadlines.Any(h => h.Id == headline.Id));
+                    Headline headline;
 
-                randomHeadlines.Add(headline);
+                    do
+                    {
+                        var index = _random.Next(0, Headlines.Length);
+                        headline = Headlines.ElementAt(index);
+                    } while (randomHeadlines.Any(h => h.Id == headline.Id));
+
+                    randomHeadlines.Add(headline);
+                }
             }
 
             return randomHeadlines;
