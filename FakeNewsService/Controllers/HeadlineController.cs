@@ -32,7 +32,12 @@ namespace FakeNewsService.Controllers
             new Headline {Id = 17, Text = "I’m Like A Chocoholic, But For Booze"},
             new Headline {Id = 18, Text = "Wealthy Teen Nearly Experiences Consequence"},
             new Headline {Id = 19, Text = "World's Scientists Admit They Just Don't Like Mice"},
-            new Headline {Id = 20, Text = "Zombie Nutritionist Recommends All-Brain Diet"}
+            new Headline {Id = 20, Text = "Zombie Nutritionist Recommends All-Brain Diet"},
+            new Headline {Id = 21, Text = "Man Returns To Work After Vacation With Fresh, Reenergized Hatred For Job"},
+            new Headline {Id = 22, Text = "World's Youngest Person Born"},
+            new Headline {Id = 23, Text = "Man Says 'F*** It', Eats Lunch at 10:58am"},
+            new Headline {Id = 24, Text = "Lunar Olympic Officials Still Searching for Missing Pole Vaulter"},
+            new Headline {Id = 25, Text = "Man Hoping People Notice How Many Folding Chairs He’s Carrying At Once"}
         };
 
         private readonly ILogger<HeadlineController> _logger;
